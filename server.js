@@ -3,7 +3,7 @@ import cors from 'cors';
 import { config } from 'dotenv';
 import cookieParser from 'cookie-parser';
 import productRoutes from './routes/productsRoutes.js';
-// import userRoutes from './routes/';
+import userRoutes from './routes/usersRoutes.js';
 // import authRoutes from './routes/authRoutes.js';
 // import authenticate from './middleware/authMiddleware.js';
 
@@ -26,7 +26,7 @@ app.use(cookieParser());
 app.use('/', productRoutes);
 
 // Use user routes
-// app.use('/', userRoutes);
+app.use('/', userRoutes);
 
 // Use authentication routes
 // app.use('/', authRoutes);
