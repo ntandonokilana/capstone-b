@@ -4,6 +4,7 @@ import { config } from 'dotenv';
 import cookieParser from 'cookie-parser';
 import productRoutes from './routes/productsRoutes.js';
 import userRoutes from './routes/usersRoutes.js';
+import path from 'path';
 // import authRoutes from './routes/authRoutes.js';
 // import authenticate from './middleware/authMiddleware.js';
 
@@ -18,7 +19,7 @@ app.use(cors(
 app.use(express.json());
 app.use(cookieParser());
 
-app.use(express.static('/public'));
+app.use(express.static("./public", path));
 
 // Use your auth middleware
 // app.use(authenticate);
