@@ -5,14 +5,14 @@ import {
 
 const router = express.Router();
 
-// Add a user
-router.route('/users').post(addUser).get(getUsers);
-
 // Get all users
-
+router.route('/users').get(getUsers);
 
 // Get user by ID
-router.route('/users/:userID').get( getUser);
+router.route('/users/:userID').get(getUser);
+
+// Add a user
+router.route('/users').post(addUser).get(getUsers);
 
 // Delete a user
 router.route('/users/:userID').delete( deleteUser);

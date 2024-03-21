@@ -5,8 +5,7 @@ import cookieParser from 'cookie-parser';
 import productRoutes from './routes/productsRoutes.js';
 import userRoutes from './routes/usersRoutes.js';
 import path from 'path';
-// import authRoutes from './routes/authRoutes.js';
-// import authenticate from './middleware/authMiddleware.js';
+
 
 config();
 
@@ -19,19 +18,15 @@ app.use(cors(
 app.use(express.json());
 app.use(cookieParser());
 
-app.use(express.static("./public", path));
+app.use(express.static("./public"));
 
-// Use your auth middleware
-// app.use(authenticate);
+
 
 // Use product routes
 app.use('/', productRoutes);
 
 // Use user routes
 app.use('/', userRoutes);
-
-// Use authentication routes
-// app.use('/', authRoutes);
 
 // Handle 404 Not Found
 app.use((req, res, next) => {
