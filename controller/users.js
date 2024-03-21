@@ -29,13 +29,14 @@ import bcrypt from 'bcrypt';
      res.send(await deleteuser(req.params.userID));
    };
    
-   const updateUser = async (req, res) => {
+   // Update a Single user
+const updateUser = async (req, res) => {
     try {
-      const { firstname, lastname, gender, age, email, password, profileurl } = req.body;
       const userID = +req.params.userID;
+      const updateData = req.body; // Contains only the fields to be updated
   
       // Update user in the database
-      await updateuser(firstname, lastname, gender, age, email, password, profileurl, userID);
+      await updateuser(updateData, userID);
   
       // Respond with the updated user
       res.json(await getuser(userID));
@@ -44,7 +45,6 @@ import bcrypt from 'bcrypt';
       res.status(500).json({ msg: 'Internal Server Error' });
     }
   };
-  
    
    
    

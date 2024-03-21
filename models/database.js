@@ -67,14 +67,23 @@ const deleteuser = async (userID) => {
     return getusers();
 };
 
-const updateuser = async (firstname, lastname, gender, age, email, password, profileurl, userID) => {
-    await pool.query(`
-        UPDATE users 
-        SET firstname=?, lastname=?, gender=?, age=?, email=?, password=?, profileurl=?
-        WHERE userID=?
-    `, [firstname, lastname, gender, age, email, password, profileurl, userID]);
-    return getusers();
-};
+const updateuser = async (updateData, userID) => {
+    // Construct the SQL update query dynamically based on the fields provided in updateData
+    let sqlQuery = "UPDATE users SET";
+    const values = [];
+  
+    for (const key in updateData) {
+      if (updateData.hasOwnProperty(key)) {
+        sqlQuery += ` ${key}=?,`;
+        values.push(updateData[key]);
+      }
+    }
+    sqlQuery = sqlQuery.slice(0, -1);
+    sqlQuery += " WHERE userID=?";
+    values.push(userID);
+      await pool.query(sqlQuery, values);
+    return getuser(userID);
+  };
 
 const checkuser = async (email, password) => {
     try {
