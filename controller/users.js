@@ -29,28 +29,13 @@ import bcrypt from 'bcrypt';
      res.send(await deleteuser(req.params.userID));
    };
    
-   // Update a Single user
    const updateUser = async (req, res) => {
     try {
       const { firstname, lastname, gender, age, email, password, profileurl } = req.body;
       const userID = +req.params.userID;
   
-      // Construct the update object
-      const updateData = {};
-      if (firstname) updateData.firstname = firstname;
-      if (lastname) updateData.lastname = lastname;
-      if (gender) updateData.gender = gender;
-      if (age) updateData.age = age;
-      if (email) updateData.email = email; // Ensure email is not null
-      if (password) {
-        // Hash the password
-        const hashedPassword = await bcrypt.hash(password, 10);
-        updateData.password = hashedPassword;
-      }
-      if (profileurl) updateData.profileurl = profileurl;
-  
       // Update user in the database
-      await updateuser(updateData, userID);
+      await updateuser(firstname, lastname, gender, age, email, password, profileurl, userID);
   
       // Respond with the updated user
       res.json(await getuser(userID));
