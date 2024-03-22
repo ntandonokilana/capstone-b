@@ -27,16 +27,20 @@ const deleteProduct = async (req, res) => {
     res.send(await deleteproduct(req.params.productID));
 };
 
-// Update a product
-let updateProduct = async (req, res) => {
+   // Update a Single product
+   const updateProduct = async (req, res) => {
     try {
-        const { prodname, produrl, category, amount } = req.body;
-        await updateproduct(prodname, produrl, category, amount, +req.params.productID);
-        res.json(await getproducts());
+      const productID = +req.params.productID;
+      const updateData = req.body; // Contains only the fields to be updated
+  
+      // Update product in the database
+      await updateproduct(updateData, productID);
+  
+      // Respond with the updated product
+      res.json(await getproduct(productID));
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ msg: 'Internal Server Error' });
+      console.error(error);
+      res.status(500).json({ msg: 'Internal Server Error' });
     }
-};
-
+  };
 export { getProducts, getProduct, addProduct, deleteProduct, updateProduct };

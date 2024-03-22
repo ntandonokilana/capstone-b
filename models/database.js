@@ -38,15 +38,15 @@ const updateProduct = async (productID, prodname, category, amount, produrl,) =>
     return getProducts();
 };
 
-// Users 
+// Users logic
 
-const adduser = async (userID, firstname, lastname, gender, age, email, password, profileurl) => {
+const adduser = async (userID, firstname, lastname, gender, age, userRole, email, password, profileurl) => {
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
     await pool.query(
-        "INSERT INTO users (userID, firstname, lastname, gender, age, email, password, profileurl) VALUES (?,?,?,?,?,?,?,?)",
-        [userID, firstname, lastname, gender, age, email, password, profileurl]
+        "INSERT INTO users (userID, firstname, lastname, gender, age, userRole, email, password, profileurl) VALUES (?,?,?,?,?,?,?,?,?)",
+        [userID, firstname, lastname, gender, age, userRole, email, password, profileurl]
     );
 
     return getusers();
@@ -68,7 +68,6 @@ const deleteuser = async (userID) => {
 };
 
 const updateuser = async (updateData, userID) => {
-    // Construct the SQL update query dynamically based on the fields provided in updateData
     let sqlQuery = "UPDATE users SET";
     const values = [];
   
@@ -106,6 +105,40 @@ const checkuser = async (email, password) => {
     }
 };
 
+// cart logic
+
+const getCartItems = async (userID) => {
+    const [result] = await pool.query(`
+        SELECT * FROM cart WHERE userID = ?`, 
+        [userID]
+    );
+    return result;
+};
+
+const addToCart = async (userID, productID, quantity) => {
+    await pool.query(
+        "INSERT INTO cart (userID, productID, quantity) VALUES (?,?,?)",
+        [userID, productID, quantity]
+    );
+    return getCartItems(userID);
+};
+
+const removeFromCart = async (userID, productID) => {
+    await pool.query(
+        "DELETE FROM cart WHERE userID = ? AND productID = ?",
+        [userID, productID]
+    );
+    return getCartItems(userID);
+};
+
+const updateCartItemQuantity = async (userID, productID, quantity) => {
+    await pool.query(
+        "UPDATE cart SET quantity = ? WHERE userID = ? AND productID = ?",
+        [quantity, userID, productID]
+    );
+    return getCartItems(userID);
+};
+
 export {
     getProducts,
     getProduct,
@@ -118,4 +151,23 @@ export {
     getuser,
     deleteuser,
     updateuser,
+    getCartItems,
+    addToCart,
+    removeFromCart,
+    updateCartItemQuantity
 };
+
+
+// export {
+//     getProducts,
+//     getProduct,
+//     addProduct,
+//     deleteProduct,
+//     updateProduct,
+//     adduser,
+//     checkuser,
+//     getusers,
+//     getuser,
+//     deleteuser,
+//     updateuser,
+// };

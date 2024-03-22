@@ -4,29 +4,28 @@ import { config } from 'dotenv';
 import cookieParser from 'cookie-parser';
 import productRoutes from './routes/productsRoutes.js';
 import userRoutes from './routes/usersRoutes.js';
+import cartRoutes from './routes/cartRoutes.js'; // Import cart routes
 import path from 'path';
-
 
 config();
 
 const app = express();
 
-
-app.use(cors(
-))
+app.use(cors());
 
 app.use(express.json());
 app.use(cookieParser());
 
 app.use(express.static("./public"));
 
-
-
 // Use product routes
 app.use('/', productRoutes);
 
 // Use user routes
 app.use('/', userRoutes);
+
+// Use cart routes
+app.use('/', cartRoutes);
 
 // Handle 404 Not Found
 app.use((req, res, next) => {
@@ -41,5 +40,5 @@ app.use((err, req, res, next) => {
 
 // Server listening
 app.listen(process.env.PORT, function () {
-    console.log('listening on port http://localhost:' + process.env.PORT);
+  console.log('listening on port http://localhost:' + process.env.PORT);
 });
