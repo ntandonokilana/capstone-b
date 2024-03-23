@@ -1,60 +1,87 @@
 import {
-    getCartItems as getCartItemsFromDB,
-    addToCart as addToCartInDB,
-    removeFromCart as removeFromCartInDB,
-    updateCartItemQuantity as updateCartItemQuantityInDB
+    getCartItems,
+    addToCart,
+    removeFromCart,
+    updateCartItemQuantity
 } from '../models/database.js';
 
-// Get cart items for a user
-const getCartItems = async (req, res) => {
-    try {
-        const userID = +req.params.userID;
-        const cartItems = await getCartItemsFromDB(userID);
-        res.json(cartItems);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ msg: 'Internal Server Error' });
-    }
+import {pool} from '../config/config.js'
+
+// Show cart items for a user
+const showCart = (req, res) => {
+  const userID = req.params.id;
+  getCartItems(userID)
+    .then(results => {
+      res.json(results);
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ error: 'Internal Server Error' });
+    });
 };
 
-// Add item to cart
-const addToCart = async (req, res) => {
-    try {
-        const userID = +req.params.userID;
-        const { productID, quantity } = req.body;
-        const updatedCart = await addToCartInDB(userID, productID, quantity);
-        res.json(updatedCart);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ msg: 'Internal Server Error' });
-    }
+// Add items to cart
+const createCart = (req, res) => {
+  const { userID, productID, quantity } = req.body;
+  addToCart(userID, productID, quantity)
+    .then(results => {
+      res.json(results);
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ error: 'Internal Server Error' });
+    });
 };
 
-// Remove item from cart
-const removeFromCart = async (req, res) => {
-    try {
-        const userID = +req.params.userID;
-        const productID = +req.params.productID;
-        const updatedCart = await removeFromCartInDB(userID, productID);
-        res.json(updatedCart);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ msg: 'Internal Server Error' });
-    }
+// Update cart item
+const updateCart = (req, res) => {
+  const { quantity } = req.body;
+  const userID = req.params.id;
+  const productID = req.params.productID;
+  updateCartItemQuantity(userID, productID, quantity)
+    .then(results => {
+      res.json(results);
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ error: 'Internal Server Error' });
+    });
 };
 
-// Update item quantity in cart
-const updateCartItemQuantity = async (req, res) => {
-    try {
-        const userID = +req.params.userID;
-        const productID = +req.params.productID;
-        const { quantity } = req.body;
-        const updatedCart = await updateCartItemQuantityInDB(userID, productID, quantity);
-        res.json(updatedCart);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ msg: 'Internal Server Error' });
-    }
+// Remove cart item by ID
+const deleteCart = (req, res) => {
+  const userID = req.params.id;
+  const productID = req.params.productID;
+  removeFromCart(userID, productID)
+    .then(results => {
+      res.json(results);
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ error: 'Internal Server Error' });
+    });
 };
 
-export { getCartItems, addToCart, removeFromCart, updateCartItemQuantity };
+// Remove all cart items for a user
+const deleteAllCartItems = (req, res) => {
+    const userID = req.params.id;
+    pool.query(
+      "DELETE FROM cart WHERE userID = ?",
+      [userID],
+      (err, results) => {
+        if (err) {
+          res.status(500).json({ error: err.message });
+        } else {
+          res.json(results);
+        }
+      }
+    );
+  };
+
+export {
+  showCart,
+  createCart,
+  updateCart,
+  deleteCart,
+  deleteAllCartItems
+};

@@ -105,13 +105,11 @@ const checkuser = async (email, password) => {
     }
 };
 
-// cart logic
+
+// Cart logic
 
 const getCartItems = async (userID) => {
-    const [result] = await pool.query(`
-        SELECT * FROM cart WHERE userID = ?`, 
-        [userID]
-    );
+    const [result] = await pool.query(`SELECT * FROM cart WHERE userID = ?`, [userID]);
     return result;
 };
 
