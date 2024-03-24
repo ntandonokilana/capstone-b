@@ -1,9 +1,15 @@
 import express from 'express';
 import {
-  updateUser,addUser,deleteUser,getUser,getUsers,
+  updateUser,addUser,loginuser, deleteUser,getUser,getUsers,
 } from '../controller/users.js';
 
 const router = express.Router();
+
+// Signup
+router.route('/signup').post(addUser);
+
+// Login
+router.route('/login').post(loginuser);
 
 // Get all users
 router.route('/users').get(getUsers);

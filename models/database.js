@@ -40,16 +40,18 @@ const updateProduct = async (productID, prodname, category, amount, produrl,) =>
 
 // Users logic
 
-const adduser = async (userID, firstname, lastname, gender, age, userRole, email, password, profileurl) => {
+const addUser = async (req, res) => {
+    const { userID, firstname, lastname, gender, age, userRole, email, password, profileurl } = req.body;
+
+    // Log the value of password
+    console.log('Password:', password);
+
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    await pool.query(
-        "INSERT INTO users (userID, firstname, lastname, gender, age, userRole, email, password, profileurl) VALUES (?,?,?,?,?,?,?,?,?)",
-        [userID, firstname, lastname, gender, age, userRole, email, password, profileurl]
-    );
+    await adduser(userID, firstname, lastname, gender, age, userRole, email, hashedPassword, profileurl);
 
-    return getusers();
+    res.json({ msg: 'User added successfully!' });
 };
 
 const getusers = async () => {
@@ -143,7 +145,7 @@ export {
     addProduct,
     deleteProduct,
     updateProduct,
-    adduser,
+    addUser,
     checkuser,
     getusers,
     getuser,
