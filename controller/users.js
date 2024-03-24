@@ -4,12 +4,12 @@ import bcrypt from 'bcrypt';
    
    // Add a user
     const addUser = async (req, res) => {
-     const {userID, firstname, lastname, gender, age, email, password, profileurl } = req.body;
+     const {userID, firstname, lastname, gender, age, userRole, email, password, profileurl } = req.body;
    
      // Hash the password
      const hashedPassword = await bcrypt.hash(password, 10);
    
-     await adduser(userID, firstname, lastname, gender, age, email, hashedPassword, profileurl);
+     await adduser(userID, firstname, lastname, gender, age, userRole, email, hashedPassword, profileurl);
    
      res.json({ msg: 'User added successfully!' });
    };

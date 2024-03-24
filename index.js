@@ -4,7 +4,7 @@ import { config } from 'dotenv';
 import cookieParser from 'cookie-parser';
 import productRoutes from './routes/productsRoutes.js';
 import userRoutes from './routes/usersRoutes.js';
-import cartRoutes from './routes/cartRoutes.js'; // Import cart routes
+import cartRoutes from './routes/cartRoutes.js';
 import path from 'path';
 
 config();
